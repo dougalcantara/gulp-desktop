@@ -1,0 +1,71 @@
+@import 'normalize';
+@import 'breakpoints';
+@import 'colors';
+@import 'fonts';
+
+body {
+  margin: 0 auto;
+  font-family: -apple-system, system-ui, 'Segoe UI', Helvetica, sans-serif;
+  font-weight: 200;
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+main {
+  width: 85%;
+  padding-top: 2em;
+}
+
+.inner {
+  width: 90%; max-width: 1400px;
+  margin: auto;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-weight: 500;
+}
+
+ul {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  display: block;
+  padding: .75em 2em;
+  border-radius: calc(1em / 4.5);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  transition: all 0.2s ease-in-out;
+  &.button-primary {
+    background: transparent; color: #bbb;
+    border: 1px solid #bbb;
+    &:hover {
+      background: #bbb; color: $textWhite;
+    }
+  }
+  &.button-save {
+    border: 0;
+    background: $brand-primary; color: $textWhite;
+    &:hover {
+      background: $brand-dark;
+    }
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+input {
+  padding: .75em 1em;
+  border: 1px solid #bbb;
+  border-radius: calc(1em / 4.5);
+  &:focus {
+    outline: 0;
+  }
+}
