@@ -33,8 +33,9 @@
 <script>
 // eslint-disable-next-line
 import { remote } from 'electron';
+// import fs from 'fs';
 import { mapGetters, mapActions } from 'vuex';
-import { determineFileType, writeProjectConfig } from '../fn/ProjectFunctions';
+import { determineFileType, writeProjectConfig, getProjectFilesFromDisk } from '../fn/ProjectFunctions';
 
 const mainWindow = remote.getCurrentWindow();
 
@@ -57,8 +58,18 @@ export default {
     ...mapGetters(['allProjects']),
   },
 
+  created() {
+    getProjectFilesFromDisk((files) => {
+      this.getAllProjects(files);
+    });
+  },
+
+  beforeDestroy() {
+    this.clearProjects();
+  },
+
   methods: {
-    ...mapActions(['getAllProjects']),
+    ...mapActions(['getAllProjects', 'clearProjects']),
 
     selectSourceFile() {
       remote.dialog.showOpenDialog(

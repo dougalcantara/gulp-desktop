@@ -3,14 +3,22 @@ const state = {
 };
 
 const mutations = {
-  populateProjects(state, projects) {
-    state.allProjects = projects;
+  populateProjects(state, project) {
+    state.allProjects.push(project);
+  },
+
+  emptyProjectsArray(state) {
+    state.allProjects = [];
   },
 };
 
 const actions = {
-  getAllProjects({ commit }, projects) {
-    commit('populateProjects', projects);
+  getAllProjects({ commit }, project) {
+    commit('populateProjects', project);
+  },
+
+  clearProjects({ commit }) {
+    commit('emptyProjectsArray');
   },
 };
 

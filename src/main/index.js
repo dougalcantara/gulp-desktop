@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from 'electron' // eslint-disable-line
+import path from 'path';
 
 /**
  * Set `__static` path to static files in production
@@ -14,6 +15,7 @@ const winURL = process.env.NODE_ENV === 'development'
   : `file://${__dirname}/index.html`;
 
 function createWindow() {
+  app.setPath('userData', path.resolve('userData/GulpProjects'));
   /**
    * Initial window options
    */
