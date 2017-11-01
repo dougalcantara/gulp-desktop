@@ -18,8 +18,9 @@ export const determineFileType = (file, sourcePathsObj) => {
 
 
 const stringifyProjectFile = projectObj => JSON.stringify({
-  projectName: projectObj.projectName,
+  projectName: path.basename(projectObj.sourcePaths.projectRoot),
   sourcePaths: {
+    projectRoot: projectObj.sourcePaths.projectRoot,
     jsEntry: projectObj.sourcePaths.jsEntry,
     scssEntry: projectObj.sourcePaths.scssEntry,
   },

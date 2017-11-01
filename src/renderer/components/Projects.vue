@@ -32,8 +32,11 @@
           <div class="new-group-form-heading">
             <h4>Create A New Project Here:</h4>
           </div>
-          <label for="project-name">Project Name:</label>
-          <input id="project-name" type="text" v-model="singleProject.projectName" placeholder="my-awesome-project" />
+          <span>Project Root Directory:</span>
+          <button id="root-select" class="button-primary" @click="selectProjectRoot">select folder</button>
+
+          <!-- <label for="project-name">Project Name:</label>
+          <input id="project-name" type="text" v-model="singleProject.projectName" placeholder="my-awesome-project" /> -->
 
           <span>SCSS/SASS Entry File:</span>
           <button id="scss-select" class="button-primary" @click="selectSourceFile">select file</button>
@@ -51,6 +54,7 @@
 <script>
 import { remote } from 'electron'; // eslint-disable-line
 import { mapGetters, mapActions } from 'vuex';
+import path from 'path';
 import { determineFileType, writeProjectConfig, getProjectFilesFromDisk } from '../fn/ProjectFunctions';
 
 const mainWindow = remote.getCurrentWindow();
@@ -64,6 +68,7 @@ export default {
       singleProject: {
         projectName: '',
         sourcePaths: {
+          projectRoot: '',
           jsEntry: '',
           scssEntry: '',
         },
@@ -89,6 +94,14 @@ export default {
       'getAllProjects',
       'clearProjects',
     ]),
+
+    selectProjectRoot() {
+      remote.dialog.showOpenDialog(
+        mainWindow,
+        { properties: ['openDirectory'] },
+        path => this.singleProject.sourcePaths.projectRoot = path[0], // eslint-disable-line
+      );
+    },
 
     selectSourceFile() {
       remote.dialog.showOpenDialog(
