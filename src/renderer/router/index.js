@@ -16,6 +16,11 @@ export default new Router({
       component: require('@/components/Projects').default,
     },
     {
+      path: '/projects/:project_name',
+      name: 'project_single',
+      component: require('@/components/ProjectSingle').default,
+    },
+    {
       path: '/configs',
       name: 'configs',
       component: require('@/components/Configs').default,

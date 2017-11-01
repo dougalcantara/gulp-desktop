@@ -10,30 +10,46 @@
         <p>You don't have any projects yet!</p>
       </div>
     </div>
-    <form>
+    <div class="projects-list-container" v-else>
       <div class="inner">
-        <div class="new-group-form-heading">
-          <h4>Create A New Project Here:</h4>
-        </div>
-        <label for="project-name">Project Name:</label>
-        <input id="project-name" type="text" v-model="singleProject.projectName" placeholder="my-awesome-project" />
-
-        <span>SCSS/SASS Entry File:</span>
-        <button id="scss-select" class="button-primary" @click="selectSourceFile">select file</button>
-
-        <span>JavaScript Entry File:</span>
-        <button id="js-select" class="button-primary" @click="selectSourceFile">select file</button>
-
-        <button class="button-save" @click="saveProject">save project</button>
+        <ul>
+          <li v-for="(project, index) in allProjects" :key="index">
+            <h2><router-link :to="{ name: 'project_single', params: { project_name: project.projectName }}">{{ project.projectName }}</router-link></h2>
+            <p>SCSS Entry File: {{ project.sourcePaths.scssEntry }}</p>
+            <p>JS Entry File: {{ project.sourcePaths.jsEntry }}</p>
+          </li>
+        </ul>
       </div>
-    </form>
+    </div>
+    <div class="new-project-trigger-container">
+      <div class="inner">
+        <button class="button-save" @click="enterNewProject = !enterNewProject">Create A New Project</button>
+      </div>
+    </div>
+    <div class="new-project-container" v-if="enterNewProject">
+      <form>
+        <div class="inner">
+          <div class="new-group-form-heading">
+            <h4>Create A New Project Here:</h4>
+          </div>
+          <label for="project-name">Project Name:</label>
+          <input id="project-name" type="text" v-model="singleProject.projectName" placeholder="my-awesome-project" />
+
+          <span>SCSS/SASS Entry File:</span>
+          <button id="scss-select" class="button-primary" @click="selectSourceFile">select file</button>
+
+          <span>JavaScript Entry File:</span>
+          <button id="js-select" class="button-primary" @click="selectSourceFile">select file</button>
+
+          <button class="button-save" @click="saveProject">save project</button>
+        </div>
+      </form>
+    </div>
   </main>
 </template>
 
 <script>
-// eslint-disable-next-line
-import { remote } from 'electron';
-// import fs from 'fs';
+import { remote } from 'electron'; // eslint-disable-line
 import { mapGetters, mapActions } from 'vuex';
 import { determineFileType, writeProjectConfig, getProjectFilesFromDisk } from '../fn/ProjectFunctions';
 
@@ -44,6 +60,7 @@ export default {
 
   data() {
     return {
+      enterNewProject: false,
       singleProject: {
         projectName: '',
         sourcePaths: {
@@ -59,9 +76,8 @@ export default {
   },
 
   created() {
-    getProjectFilesFromDisk((files) => {
-      this.getAllProjects(files);
-    });
+    this.clearProjects();
+    getProjectFilesFromDisk(files => this.getAllProjects(files));
   },
 
   beforeDestroy() {
@@ -69,7 +85,10 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getAllProjects', 'clearProjects']),
+    ...mapActions([
+      'getAllProjects',
+      'clearProjects',
+    ]),
 
     selectSourceFile() {
       remote.dialog.showOpenDialog(
@@ -93,6 +112,10 @@ export default {
 
 <style lang="scss" scoped>
 .no-projects-warning-container {
+  padding: 2em 0;
+}
+
+.new-project-trigger-container {
   padding: 2em 0;
 }
 

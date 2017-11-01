@@ -1,17 +1,20 @@
 const gulp = require('gulp');
-const path = require('path');
-const gutil = require('gulp-util');
-const yargs = require('yargs');
+// const path = require('path');
+// const gutil = require('gulp-util');
+const _if = require('gulp-if'); // eslint-disable-line
+const yargs = require('yargs').boolean('autoprefix').boolean('minify').boolean('smaps');
 const argv = yargs.argv;
-const bsync = require('browser-sync').create();
+// const bsync = require('browser-sync').create();
 const plumber = require('gulp-plumber');
 const gsass = require('gulp-sass');
+const clean = require('gulp-clean-css');
 const prefixer = require('gulp-autoprefixer');
-const babel = require('gulp-babel');
-const concat = require('gulp-concat');
+// const babel = require('gulp-babel');
+// const concat = require('gulp-concat');
 const smaps = require('gulp-sourcemaps');
 
-console.log(argv.scss_src);
+
+console.log(argv);
 const paths = {
   sources: {
     js: argv.js_src,
@@ -23,44 +26,17 @@ const paths = {
   },
 };
 
-gulp.task('scss', () => {
+gulp.task('scss', () => { // eslint-disable-line
   return gulp.src(`${paths.sources.scss}`)
     .pipe(plumber())
-    .pipe(smaps.init())
+    .pipe(_if(argv.smaps, smaps.init()))
     .pipe(gsass.sync().on('error', gsass.logError))
-    .pipe(prefixer({
+    .pipe(_if(argv.autoprefix, prefixer({
       browsers: ['last 2 versions'],
-    }))
-    .pipe(smaps.write())
+    })))
+    .pipe(_if(argv.minify, clean({ compatibility: 'ie8' })))
+    .pipe(_if(argv.smaps, smaps.write()))
     .pipe(gulp.dest(`${paths.destinations.css}`));
 });
-
-
-// gulp.task('scss', () => {
-//   return gulp.src(paths.sources.scss)
-//     .pipe(_if(!isprod, sourcemaps.init()))
-//     .pipe(sass({
-//       outputStyle: isprod ? 'compressed' : 'nested',
-//       includePaths: PATHS.scssincludes
-//     }).on('error', sass.logError))
-//     .pipe(autoprefixer({
-//       browsers: ['> 0.5%', 'last 5 versions']
-//     }))
-//     .pipe(_if(!isprod, sourcemaps.write('./')))
-//     .pipe(gulp.dest(PATHS.shopifyassets))
-//     .pipe(_if(isstyleguide, gulp.dest(PATHS.styleguide.css)));
-// });
-
-
-// gulp.task('js', () => gulp.src(paths.sources.js)
-//   .pipe(plumber())
-//   .pipe(smaps.init())
-//   .pipe(gsass().on('error', gsass.logError()))
-//   .pipe(prefixer({
-//     browsers: ['last 2 versions'],
-//     cascade: false,
-//   }))
-//   .pipe(smaps.write(paths.destinations.css)),
-// );
 
 gulp.task('default', ['scss']);

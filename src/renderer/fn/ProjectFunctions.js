@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import cmd from 'node-cmd';
 import { remote } from 'electron'; // eslint-disable-line
 
 
@@ -53,4 +54,17 @@ export const getProjectFilesFromDisk = (callback) => {
       });
     });
   });
+};
+
+/* eslint-disable */
+const gulpCmdArgsBuilder = (gulpOptions, cwd, gulpfile, sourcePaths) => {
+  return `gulp --cwd ${cwd} --gulpfile ${gulpfile} --scss_src ${sourcePaths.scssEntry} --css_dest /Users/apple/webdev/dummy-gulp-target/dist/assets/css/ --autoprefix ${gulpOptions.autoprefix} --minify ${gulpOptions.minify} --smaps ${gulpOptions.smaps}`;
+};
+/* eslint-enable */
+
+export const runGulpOnProject = (gulpOptions, cwd, gulpfile, sourcePaths, callback) => {
+  console.log(gulpCmdArgsBuilder(gulpOptions, cwd, gulpfile, sourcePaths));
+  cmd.get(gulpCmdArgsBuilder(gulpOptions, cwd, gulpfile, sourcePaths),
+    (err, data, stderr) => callback(data, stderr),
+  );
 };
