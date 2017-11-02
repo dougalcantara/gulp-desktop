@@ -54,7 +54,6 @@
 <script>
 import { remote } from 'electron'; // eslint-disable-line
 import { mapGetters, mapActions } from 'vuex';
-import path from 'path';
 import { determineFileType, writeProjectConfig, getProjectFilesFromDisk } from '../fn/ProjectFunctions';
 
 const mainWindow = remote.getCurrentWindow();

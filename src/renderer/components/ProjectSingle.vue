@@ -6,23 +6,46 @@
           <h1>{{ currentProject[0].projectName }}</h1>
         </div>
       </div>
-      <div class="project-options-container">
+      <div class="project-options--forms_container">
         <div class="inner">
-          <h2>CSS Options:</h2>
-          <form class="project-options--css">
-            <div class="input-group">
-              <input id="minify-css" type="checkbox" v-model="gulpOptions.minify">
-              <label for="minify-css">&nbsp; Minify CSS</label>
+          <div class="project-options--css_container">
+            <div class="form-heading-container">
+              <h2>CSS Options:</h2>
             </div>
-            <div class="input-group">
-              <input id="write-sourcemaps" type="checkbox" v-model="gulpOptions.smaps">
-              <label for="write-sourcemaps">&nbsp; Write SourceMaps</label>
+            <form class="project-options--css_form">
+              <div class="input-group">
+                <input id="minify-css" type="checkbox" v-model="gulpOptions.CSSminify">
+                <label for="minify-css">&nbsp; Minify CSS</label>
+              </div>
+              <div class="input-group">
+                <input id="write-CSSsourcemaps" type="checkbox" v-model="gulpOptions.CSSsmaps">
+                <label for="write-CSSsourcemaps">&nbsp; Write SourceMaps</label>
+              </div>
+              <div class="input-group">
+                <input id="autoprefix" type="checkbox" v-model="gulpOptions.CSSautoprefix">
+                <label for="autoprefix">&nbsp; AutoPrefix</label>
+              </div>
+            </form>
+          </div>
+          <div class="project-options--js_container">
+            <div class="form-heading-container">
+              <h2>JS Options:</h2>
             </div>
-            <div class="input-group">
-              <input id="autoprefix" type="checkbox" v-model="gulpOptions.autoprefix">
-              <label for="autoprefix">&nbsp; AutoPrefix</label>
-            </div>
-          </form>
+            <form class="project-options--js_form">
+              <div class="input-group">
+                <input id="minify-js" type="checkbox" v-model="gulpOptions.JSUglify">
+                <label for="minify-js">&nbsp; Uglify JS</label>
+              </div>
+              <div class="input-group">
+                <input id="write-JSsourcemaps" type="checkbox" v-model="gulpOptions.JSsmaps">
+                <label for="write-JSsourcemaps">&nbsp; Write SourceMaps</label>
+              </div>
+              <div class="input-group">
+                <input id="babel" type="checkbox" v-model="gulpOptions.JSBabel">
+                <label for="babel">&nbsp; Babel</label>
+              </div>
+            </form>
+          </div>
           <button @click="_runGulpOnProject" class="button-save">Run Gulp</button>
         </div>
       </div>
@@ -40,9 +63,12 @@ export default {
   data() {
     return {
       gulpOptions: {
-        minify: false,
-        smaps: false,
-        autoprefix: false,
+        CSSminify: false,
+        CSSsmaps: false,
+        CSSautoprefix: false,
+        JSSourceMaps: false,
+        JSUglify: false,
+        JSsmaps: false,
       },
     };
   },
@@ -56,7 +82,7 @@ export default {
 
     currentProject() {
       if (!this.allProjects) return;
-      return this.allProjects.filter(project => // eslint-disable-line
+      return this.allProjects.filter(project => // eslint-disable-line consistent-return
         project.projectName === this.$route.params.project_name,
       );
     },
@@ -85,8 +111,8 @@ export default {
     _runGulpOnProject() {
       runGulpOnProject(
         this.gulpOptions,
-        '/Users/apple/webdev/dummy-gulp-target/',
-        './src/gulp/gulpfile.js',
+        ['scss'], // needs to be dynamic
+        './src/gulp/gulpfile.js', // needs to be dynamic
         this.currentProject[0].sourcePaths,
         (output, err) => console.log(output, err),
       );
@@ -96,5 +122,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+form {
+  input, label {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
 
+.project-options {
+  &--css_container, &--js_container {
+    padding: 1em 0;
+  }
+}
+
+.form-heading-container {
+  margin-bottom: 1em;
+}
 </style>
