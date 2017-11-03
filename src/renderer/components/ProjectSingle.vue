@@ -14,15 +14,15 @@
             </div>
             <form class="project-options--css_form">
               <div class="input-group">
-                <input id="minify-css" type="checkbox" v-model="gulpOptions.CSSminify">
+                <input id="minify-css" type="checkbox" v-model="gulpOptions.CSSMinify">
                 <label for="minify-css">&nbsp; Minify CSS</label>
               </div>
               <div class="input-group">
-                <input id="write-CSSsourcemaps" type="checkbox" v-model="gulpOptions.CSSsmaps">
+                <input id="write-CSSsourcemaps" type="checkbox" v-model="gulpOptions.CSSSmaps">
                 <label for="write-CSSsourcemaps">&nbsp; Write SourceMaps</label>
               </div>
               <div class="input-group">
-                <input id="autoprefix" type="checkbox" v-model="gulpOptions.CSSautoprefix">
+                <input id="autoprefix" type="checkbox" v-model="gulpOptions.CSSAutoprefix">
                 <label for="autoprefix">&nbsp; AutoPrefix</label>
               </div>
             </form>
@@ -37,7 +37,7 @@
                 <label for="minify-js">&nbsp; Uglify JS</label>
               </div>
               <div class="input-group">
-                <input id="write-JSsourcemaps" type="checkbox" v-model="gulpOptions.JSsmaps">
+                <input id="write-JSsourcemaps" type="checkbox" v-model="gulpOptions.JSSmaps">
                 <label for="write-JSsourcemaps">&nbsp; Write SourceMaps</label>
               </div>
               <div class="input-group">
@@ -63,12 +63,12 @@ export default {
   data() {
     return {
       gulpOptions: {
-        CSSminify: false,
-        CSSsmaps: false,
-        CSSautoprefix: false,
+        CSSMinify: false,
+        CSSSmaps: false,
+        CSSAutoprefix: false,
         JSSourceMaps: false,
         JSUglify: false,
-        JSsmaps: false,
+        JSSmaps: false,
       },
     };
   },
@@ -111,10 +111,10 @@ export default {
     _runGulpOnProject() {
       runGulpOnProject(
         this.gulpOptions,
-        ['scss'], // needs to be dynamic
+        ['scss js'], // needs to be dynamic
         './src/gulp/gulpfile.js', // needs to be dynamic
         this.currentProject[0].sourcePaths,
-        (output, err) => console.log(output, err),
+        (err, data, stderr) => console.log(err || '', data, stderr),
       );
     },
   },

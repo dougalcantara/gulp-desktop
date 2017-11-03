@@ -58,10 +58,11 @@ export const getProjectFilesFromDisk = (callback) => {
 
 
 export const runGulpOnProject = (gulpOptions, jobs, gulpfile, sourcePaths, callback) => {
-  const gulpCmdArgsBuilder = (gulpOptions, jobs, gulpfile, sourcePaths) =>
-    `gulp --cwd ${sourcePaths.projectRoot} --gulpfile ${gulpfile} --jobs ${jobs} --scss_src ${sourcePaths.scssEntry} --css_dest ${sourcePaths.projectRoot}/dist/assets/css/ --js_src ${sourcePaths.jsEntry} --js_dest ${sourcePaths.projectRoot}/dist/assets/js/ --CSSautoprefix ${gulpOptions.CSSautoprefix} --CSSminify ${gulpOptions.CSSminify} --CSSsmaps ${gulpOptions.CSSsmaps} --JSsmaps ${gulpOptions.JSsmaps} --JSUglify ${gulpOptions.JSUglify} --JSBabel ${gulpOptions.JSBabel}`;
+  // const extractArrayStrings = arr => arr.forEach(string => string);
 
-  cmd.get(gulpCmdArgsBuilder(gulpOptions, jobs, gulpfile, sourcePaths),
-    (err, data, stderr) => callback(data, stderr),
-  );
+  const gulpCmdArgsBuilder = () =>
+    `gulp --cwd ${sourcePaths.projectRoot} --gulpfile ${gulpfile} --jobs ${jobs} --scss_src ${sourcePaths.scssEntry} --css_dest ${sourcePaths.projectRoot}/dist/assets/css/ --js_src ${sourcePaths.jsEntry} --js_dest ${sourcePaths.projectRoot}/dist/assets/js/ --CSSAutoprefix ${gulpOptions.CSSAutoprefix} --CSSMinify ${gulpOptions.CSSMinify} --CSSSmaps ${gulpOptions.CSSSmaps} --JSSmaps ${gulpOptions.JSSmaps} --JSUglify ${gulpOptions.JSUglify} --JSBabel ${gulpOptions.JSBabel}`;
+
+  console.log(gulpCmdArgsBuilder());
+  cmd.get(gulpCmdArgsBuilder(), (err, data, stderr) => callback(err, data, stderr));
 };
